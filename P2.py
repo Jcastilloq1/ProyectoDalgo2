@@ -1,20 +1,26 @@
 from itertools import permutations
+import sys
+import time
 
 def leer_entrada():
     """
-    Lee la entrada del problema desde la entrada estándar.
+    Lee la entrada del problema desde un archivo.
     Retorna una lista de casos de prueba, donde cada caso es una tupla
-    (n, w1, w2, elementos_fundamentales).d
+    (n, w1, w2, elementos_fundamentales).
     """
     casos = []
-    n_casos = int(input())
-    for _ in range(n_casos):
-        n, w1, w2 = map(int, input().split())
-        elementos_fundamentales = []
-        for _ in range(n):
-            a1, a2 = map(int, input().split())
-            elementos_fundamentales.append((a1, a2))
-        casos.append((n, w1, w2, elementos_fundamentales))
+    # Abre el archivo en modo lectura
+    with open("P0.in", "r") as file:
+        # Lee el número de casos de prueba
+        n_casos = int(file.readline().strip())
+        for _ in range(n_casos):
+            # Lee los datos de cada caso de prueba
+            n, w1, w2 = map(int, file.readline().strip().split())
+            elementos_fundamentales = []
+            for _ in range(n):
+                a1, a2 = map(int, file.readline().strip().split())
+                elementos_fundamentales.append((a1, a2))
+            casos.append((n, w1, w2, elementos_fundamentales))
     return casos
 
 def calcular_ltp(m1, m2, c1, c2, w1, w2):
@@ -73,12 +79,17 @@ def construir_compuesto(elementos_fundamentales, w1, w2):
         cadena_resultado = ",".join(f"({a},{b})" for a, b in mejor_cadena) + " " + str(mejor_energia)
         return cadena_resultado
 
-def main():
-    casos = leer_entrada()
-    for caso in casos:
-        n, w1, w2, elementos_fundamentales = caso
-        resultado = construir_compuesto(elementos_fundamentales, w1, w2)
-        print(resultado)
-
 if __name__ == "__main__":
-    main()
+   try:
+       start_time = time.time()
+       casos = leer_entrada()
+       for caso in casos:
+            n, w1, w2, elementos_fundamentales = caso
+            resultado = construir_compuesto(elementos_fundamentales, w1, w2)
+            print(resultado)
+
+       end_time = time.time()  # Registro de tiempo final
+       elapsed_time = end_time - start_time  # Cálculo del tiempo transcurrido
+       print("Tiempo total de ejecución:", elapsed_time, "segundos")
+   except Exception as e:
+       print(e, file=sys.stderr)
